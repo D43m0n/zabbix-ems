@@ -36,3 +36,6 @@ nosetests.xml
 
 # Apple crap
 .DS_Store
+
+# Vagrant stuff
+vagrant/.vagrant

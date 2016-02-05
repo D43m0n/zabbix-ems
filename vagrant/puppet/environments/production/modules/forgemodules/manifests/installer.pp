@@ -1,7 +1,7 @@
 #
 define forgemodules::installer (
   $modulename = $title, 
-  $puppetcmd = '/opt/puppetlabs/puppet/bin', 
+  $puppetcmd = '/opt/puppetlabs/puppet/bin/puppet', 
   $installdir = '/opt/puppetlabs/puppet/modules' 
 ) {
   

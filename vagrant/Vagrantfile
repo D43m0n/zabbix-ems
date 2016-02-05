@@ -17,6 +17,11 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "centos/7"
 
+  # vagrant plugin: vagrant-timezone
+  if Vagrant.has_plugin?("vagrant-timezone")
+    config.timezone.value = "Europe/Amsterdam"
+  end
+
   # vagrant plugin: vagrant-puppet-install
   config.puppet_install.puppet_version = :latest
 

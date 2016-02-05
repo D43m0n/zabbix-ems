@@ -12,6 +12,7 @@ package {$packagelist:
 
 node /server/ {
   notice("Selecting manifests for *server*")
+  include zabbix_server
 }
 
 node /client/ {

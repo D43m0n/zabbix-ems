@@ -13,4 +13,10 @@ class zabbix_server::config {
     database_type => 'mysql',
     zabbix_timezone => $facts['timezone'],
   }
+
+  selboolean {'httpd_can_network_connect':
+    persistent => true,
+    value      => on
+  }
+
 }

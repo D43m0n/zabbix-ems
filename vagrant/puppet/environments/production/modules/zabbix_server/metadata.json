@@ -1,0 +1,30 @@
+{
+  "name": "d43m0n-zabbix_server",
+  "version": "0.1.0",
+  "author": "d43m0n",
+  "summary": "install and configure a zabbix server for development of zabbix-ems with vagrant",
+  "license": "Apache-2.0",
+  "source": "",
+  "project_page": null,
+  "issues_url": null,
+   "operatingsystem_support": [
+    {
+      "operatingsystem":"RedHat",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem":"Ubuntu",
+      "operatingsystemrelease": [
+        "14:04"
+      ]
+    }
+  ],
+  "dependencies": [
+    {"name":"wdijkerman-zabbix","version_requirement":">= 2.1.0"}
+  ],
+  "data_provider": null
+}
+

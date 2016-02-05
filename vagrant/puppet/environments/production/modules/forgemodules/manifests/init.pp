@@ -15,12 +15,12 @@
 # * `puppetcmd`
 # Location of the puppet binary. On 3.x versions of Puppet this is usually
 # located in "/usr/bin/puppet", on 4.x versions of Puppet this is usually
-# "/opt/puppetlabs/puppet/bin/puppet".
+# "/opt/puppetlabs/puppet/bin/puppet". Puppet 4.x is the default.
 # 
 # * `installdir`
 # Where to install the puppet module. Depending on your needs, this could be
 # restricted to a specific directory, or one of the "$modulepath" directories
-# Puppet already knows about.
+# Puppet already knows about. Puppet 4.x is the default.
 #
 #
 # Examples

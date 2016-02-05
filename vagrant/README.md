@@ -20,6 +20,11 @@ vagrant plugin install vagrant-puppet-install
 ```
 vagrant plugin install vagrant-vbguest
 ```
+* install the _vagrant-timezone_ plugin from a terminal:
+```
+vagrant plugin install vagrant-timezone
+```
+
 
 ## Things to keep in mind
 Now there is a [bug](https://github.com/dotless-de/vagrant-vbguest/issues/161) with certain versions of this plugin. You can choose to use the updated _vagrant box_ or manually install the latest _kernel_ and _kernel-devel_ rpms followed by a `vagrant reload`. There is an [other workaround][https://github.com/dotless-de/vagrant-vbguest/issues/141#issuecomment-101071914] which has been implemented in the included _Vagrantfile_.

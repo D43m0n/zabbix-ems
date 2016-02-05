@@ -1,0 +1,30 @@
+{
+  "name": "d43m0n-forgemodules",
+  "version": "0.1.0",
+  "author": "d43m0n",
+  "summary": "install or remove puppet modules from the puppet-forge in any location",
+  "license": "Apache-2.0",
+  "source": "https://github.com/d43m0n/puppet-forgemodules",
+  "project_page": "https://github.com/d43m0n/puppet-forgemodules",
+  "issues_url": "https://github.com/d43m0n/puppet-forgemodules/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem":"RedHat",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem":"Ubuntu",
+      "operatingsystemrelease": [
+        "14:04"
+      ]
+    }
+  ],
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+

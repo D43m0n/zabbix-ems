@@ -8,6 +8,8 @@ This directory containts a [vagrant](https://www.vagrantup.com) configuration ta
 
 ## Getting started
 There are some things you need to prepare for vagrant, such as installing a few plugins. If you're interested, some more info on plugins can be found [here](https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins).
+* begin by installing [VirtualBox](https://www.virtualbox.org)
+* then install [vagrant](https://www.vagrantup.com)
 * install the _vagrant-hostmanager_ plugin from a terminal:
 ```
 vagrant plugin install vagrant-hostmanager

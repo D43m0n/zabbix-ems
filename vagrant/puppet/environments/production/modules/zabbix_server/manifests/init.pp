@@ -15,11 +15,14 @@
 # Copyright 2016 Your name here, unless otherwise noted.
 #
 class zabbix_server {
-  contain zabbix_server::install
-  contain zabbix_server::config
+  contain '::zabbix_server::configpuppetdb'
+  contain '::zabbix_server::configzabbix'
 
-  notify {"notify-$module_name":
-    message => "Applying $module_name manifest"
+  Class['::zabbix_server::configpuppetdb'] ->
+  Class['::zabbix_server::configzabbix']
+
+  notify {"notify-${module_name}":
+    message => "Applying ${module_name} manifest"
   }
 
 }

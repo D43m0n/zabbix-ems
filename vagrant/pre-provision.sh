@@ -32,6 +32,7 @@ function installmodule {
   fi
 }
 
+# make sure all requested modules are installed, if not, install them.
 for MODULENAME in ${MODULELIST}; do
   if ${PUPPETCMD} module list | grep ${MODULENAME} > /dev/null; then
     echo "Puppet module ${MODULENAME} already installed, nothing to do"

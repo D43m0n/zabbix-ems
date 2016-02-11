@@ -22,7 +22,5 @@ class zabbix_server::configpuppetdb {
     masterless      => true,
     restart_puppet  => false
   }
-
-
-
+  
 }

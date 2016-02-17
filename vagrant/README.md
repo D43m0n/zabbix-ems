@@ -32,30 +32,30 @@ For the time being, there is a specific order in which vagrant needs to 'up' and
 
 The order is:
 1. Create the server:
-```
-vagrant up server
-```
-This creates the vm and does the initial provisiong run. A warning is displayed about the use of _exported resources_ (chicken and egg issue), which is solved by:
+    ```
+    vagrant up server
+    ```
+    This creates the vm and does the initial provisiong run. A warning is displayed about the use of _exported resources_ (chicken and egg issue), which is solved by:
 2. Provison the server (again):
-```
-vagrant provision server
-```
-In the previous step, PuppetDB and the dummy puppetmaster are configured, in this run the _exported resources_ from the Zabbix server are actually stored in PuppetDB for later use when most of the Zabbix server configuration is automated in this run.
+    ```
+    vagrant provision server
+    ```
+    In the previous step, PuppetDB and the dummy puppetmaster are configured, in this run the _exported resources_ from the Zabbix server are actually stored in PuppetDB for later use when most of the Zabbix server configuration is automated in this run.
 3. Create the client:
-```
-vagrant up client
-```
-This creates the vm for the Zabbix client and does basically the same for the first 'up' of the server: things are prepared so _exported resources_ can be stored in PuppetDB.
+    ```
+    vagrant up client
+    ```
+    This creates the vm for the Zabbix client and does basically the same for the first 'up' of the server: things are prepared so _exported resources_ can be stored in PuppetDB.
 4. Provison the client (again):
-```
-vagrant provision client
-```
-In the previous step, the Zabbix client have been prepared to store _exported resources_, this step actually stores them in PuppetDB.
+    ```
+    vagrant provision client
+    ```
+    In the previous step, the Zabbix client have been prepared to store _exported resources_, this step actually stores them in PuppetDB.
 5. Provison the server (again):
-```
-vagrant provision server
-```
-This final step uses the _exported resources_ of both the Zabbix server and client to create the Zabbix client as a host in Zabbix and link all listed zabbix-ems templates automatically.
+    ```
+    vagrant provision server
+    ```
+    This final step uses the _exported resources_ of both the Zabbix server and client to create the Zabbix client as a host in Zabbix and link all listed zabbix-ems templates automatically.
 6. Open your browser and point it to [localhost:8080](http://localhost:8080) and login with username **admin** and password **zabbix**.
 
 ## Things to keep in mind

@@ -14,15 +14,24 @@
 #
 # Copyright 2016 Your name here, unless otherwise noted.
 #
-class zabbix_server {
-  contain '::zabbix_server::configpuppetdb'
-  contain '::zabbix_server::configzabbix'
+class zabbix_server (
 
-  Class['::zabbix_server::configpuppetdb'] ->
-  Class['::zabbix_server::configzabbix']
+  $puppetcmd = $zabbix_server::params::puppetcmd,
+  $puppetconfig = $zabbix_server::params::puppetconfig,
+  $fullyqualified = $zabbix_server::params::fullyqualified
+  
+  ) inherits ::zabbix_server::params {
 
-  notify {"notify-${module_name}":
-    message => "Applying ${module_name} manifest"
-  }
+    contain '::zabbix_server::installpuppetserver'
+    contain '::zabbix_server::configpuppetdb'
+    contain '::zabbix_server::configzabbix'
+
+    Class['::zabbix_server::installpuppetserver'] ->
+    Class['::zabbix_server::configpuppetdb'] ->
+    Class['::zabbix_server::configzabbix']
+
+    notify {"notify-${module_name}":
+      message => "Applying ${module_name} manifest"
+    }
 
 }

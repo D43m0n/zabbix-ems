@@ -31,35 +31,31 @@ vagrant plugin install vagrant-timezone
 For the time being, there is a specific order in which vagrant needs to 'up' and 'provision' both vm's.
 
 The order is:
-1. Create the server:
-        ```
-        vagrant up server
-        ```
-        This creates the vm and does the initial provisiong run. A warning is displayed about the use of _exported resources_ (chicken and egg issue), which is solved by:
-2. Provison the server (again):
-        ```
-        vagrant provision server
-        ```
-        In the previous step, PuppetDB and the dummy puppetmaster are configured, in this run the _exported resources_ from the Zabbix server are actually stored in PuppetDB for later use when most of the Zabbix server configuration is automated in this run.
-3. Create the client:
-        ```
-        vagrant up client
-        ```
-        This creates the vm for the Zabbix client and does basically the same for the first 'up' of the server: things are prepared so _exported resources_ can be stored in PuppetDB.
-4. Provison the client (again):
-        ```
-        vagrant provision client
-        ```
-        In the previous step, the Zabbix client have been prepared to store _exported resources_, this step actually stores them in PuppetDB.
-5. Provison the server (again):
-        ```
-        vagrant provision server
-        ```
-        This final step uses the _exported resources_ of both the Zabbix server and client to create the Zabbix client as a host in Zabbix and link all listed zabbix-ems templates automatically.
+
+1. Create the server. This creates the vm and does the initial provisiong run. A warning is displayed about the use of _exported resources_ (chicken and egg issue), which is solved by the next run.
+    ```
+    vagrant up server
+    ```
+2. Provison the server (again). In the previous step, PuppetDB and the dummy puppetmaster are configured, in this run the _exported resources_ from the Zabbix server are actually stored in PuppetDB for later use when most of the Zabbix server configuration is automated in this run.
+    ```
+    vagrant provision server
+    ```
+3. Create the client. This creates the vm for the Zabbix client and does basically the same for the first 'up' of the server: things are prepared so _exported resources_ can be stored in PuppetDB.
+    ```
+    vagrant up client
+    ```
+4. Provison the client (again). In the previous step, the Zabbix client have been prepared to store _exported resources_, this step actually stores them in PuppetDB.
+    ```
+    vagrant provision client
+    ```
+5. Provison the server (again). This final step uses the _exported resources_ of both the Zabbix server and client to create the Zabbix client as a host in Zabbix and link all listed zabbix-ems templates automatically.
+    ```
+    vagrant provision server
+    ```
 6. Open your browser and point it to [localhost:8080](http://localhost:8080) and login with username **admin** and password **zabbix**.
 
 ## Things to keep in mind
-* Now there is a [bug](https://github.com/dotless-de/vagrant-vbguest/issues/161)with certain versions of this plugin. You can choose to use the updated _vagrant box_ or manually install the latest _kernel_ and _kernel-devel_ rpms followed by a `vagrant reload`. There is an [other workaround][https://github.com/dotless-de/vagrant-vbguest/issues/141#issuecomment-101071914] which has been implemented in the included _Vagrantfile_.
+* Now there is a [bug](https://github.com/dotless-de/vagrant-vbguest/issues/161) with certain versions of this plugin. You can choose to use the updated _vagrant box_ or manually install the latest _kernel_ and _kernel-devel_ rpms followed by a `vagrant reload`. There is an [other workaround][https://github.com/dotless-de/vagrant-vbguest/issues/141#issuecomment-101071914] which has been implemented in the included _Vagrantfile_.
 * There is also a [bug](https://forge.puppetlabs.com/wdijkerman/zabbix#when-using-exported-resources) with the Puppet module [wdijkerman-zabbix](https://forge.puppetlabs.com/wdijkerman/zabbix) that's used in this configuration. The author of the module is aware of this issue and currently advises to run _puppet apply_ a few times: `vagrant provision server` so the templates will be installed eventually.
 * the vm's are based on the _centos/7_ box as found on [HashiCorp's Atlas](https://atlas.hashicorp.com/search). You may choose a different _vagrant box_ but make sure it's one supported by zabbix-ems.
 * installing puppet modules from the [puppet forge](https://forge.puppetlabs.com) **with** dependencies can be a pain. Make sure that whatever module you want to install from the puppet forge meets the dependencies of all other modules.

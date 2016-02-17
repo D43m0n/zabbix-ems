@@ -11,10 +11,11 @@ package {$packagelist:
 }
 
 node /server/ {
-  notice('Selecting manifests for *server*')
+  notice('Selecting manifests for *** server ***')
   include ::zabbix_server
 }
 
 node /client/ {
-  notice('Selecting manifests for *client*')
+  notice('Selecting manifests for *** client ***')
+  include ::zabbix_client
 }

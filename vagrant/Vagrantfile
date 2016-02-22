@@ -17,6 +17,9 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "centos/7"
 
+  # give the box a little more time to boot before vagrant tries to communicate
+  config.vm.boot_timeout = 600
+
   # vagrant plugin: vagrant-timezone
   if Vagrant.has_plugin?("vagrant-timezone")
     config.timezone.value = "Europe/Amsterdam"
@@ -37,7 +40,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define :server do |srv|
     srv.vm.provider "virtualbox" do |vb|
-      vb.memory = 1024
+      vb.memory = 2048
     end
     srv.vm.hostname = "zabbix-server.localdomain"
     srv.vm.synced_folder "synced_folder/server/", "/vagrant", create: true
@@ -62,7 +65,7 @@ Vagrant.configure(2) do |config|
     cl.hostmanager.aliases = %w(zabbix-client.localdomain zabbix-client.zems)
     cl.vm.provision "shell", path: "pre-provision.sh"
     cl.vm.provision "puppet" do |clpuppet|
-      clpuppet.options = ['--verbose']
+      clpuppet.options = ['--verbose --fileserverconfig=/vagrant/fileserver.conf']
       clpuppet.environment_path = "puppet/environments"
     end
  end

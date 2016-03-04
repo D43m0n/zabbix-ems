@@ -26,7 +26,7 @@ Requires: python-setuptools
 %endif
 
 Requires: zabbix-agent
-Requires: sudo
+Requires: sudo >= 1.7.2
 Vendor: Marijn Giesen <marijn@studio-donder.nl>
 Url: https://github.com/marijngiesen/zabbix-ems
 
@@ -49,16 +49,30 @@ install -m 0644 -p config/zabbix/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/za
 install -m 0644 -p templates/*.xml $RPM_BUILD_ROOT%{_datadir}/%{name}/templates
 
 %post
-# Make sure Zabbix can execute zems as root
-if [ -z "`cat /etc/sudoers | grep 'zabbix ALL=NOPASSWD'`" ]; then
-    cat <<HERE >> /etc/sudoers
+# we require sudo with includedir support, so let's check where to add our sudo rules
+
+# do we have an includedir enabled in /etc/sudoers?
+if [ ! -z "`cat /etc/sudoers | grep '^#includedir'`" ]; then
+# if we get here, we do, lets find out where it is and add our sudo rules
+  cat << HERE > `cat /etc/sudoers | grep '^#includedir' | cut -d' ' -f2`/"%{name}"
+Defaults:zabbix !requiretty
 zabbix ALL=NOPASSWD: /usr/bin/zems
 HERE
-fi
+elif [ -z "`cat /etc/sudoers | grep '^#includedir'`" ]; then
+  # if we get here, we don't have an includedir, so we add our sudo rules to /etc/sudoers
+
+  # Make sure Zabbix can execute zems as root
+  if [ -z "`cat /etc/sudoers | grep 'zabbix ALL=NOPASSWD'`" ]; then
+  cat <<THERE >> /etc/sudoers
+zabbix ALL=NOPASSWD: /usr/bin/zems
+THERE
+  fi
     
-# Do not require a TTY for the Zabbix user
-if [ -z "`cat /etc/sudoers | grep 'Defaults:zabbix !requiretty'`" ]; then
-    echo 'Defaults:zabbix !requiretty' >> /etc/sudoers
+  # Do not require a TTY for the Zabbix user
+  if [ -z "`cat /etc/sudoers | grep 'Defaults:zabbix !requiretty'`" ]; then
+      echo 'Defaults:zabbix !requiretty' >> /etc/sudoers
+  fi
+
 fi
 
 # We need to create the logfile, cause Zems will error out if not.
@@ -71,16 +85,25 @@ if [ ! -z "`uname -r | grep el5`" ]; then
 fi
 
 %preun
-# remove Zabbix ability to execute /usr/bin/zems as root
-/bin/grep -v "%{name}" /etc/sudoers > /tmp/sudoers.removeme
-cat /tmp/sudoers.removeme > /etc/sudoers
-rm /tmp/sudoers.removeme
+# do we have an includedir enabled in /etc/sudoers?
+if [ ! -z "`cat /etc/sudoers | grep '^#includedir'`" ]; then
+# if we get here, we do, lets find out where it is and remove our sudo rules
+rm `cat /etc/sudoers | grep '^#includedir' | cut -d' ' -f2`/"%{name}"
+elif [ -z "`cat /etc/sudoers | grep '^#includedir'`" ]; then
+  # if we get here, we don't have an includedir, so we remove our sudo rules from /etc/sudoers
 
-# remove requiretty rule for the Zabbix user if no other commands for zabbix exist (that we created)
-if [ `/bin/cat /etc/sudoers | /bin/grep ^zabbix -c` == 0 ]; then
-  /bin/grep -v 'Defaults:zabbix !requiretty' /etc/sudoers > /tmp/sudoers.removeme
+  # remove Zabbix ability to execute /usr/bin/zems as root
+  /bin/grep -v "%{name}" /etc/sudoers > /tmp/sudoers.removeme
   cat /tmp/sudoers.removeme > /etc/sudoers
   rm /tmp/sudoers.removeme
+
+  # remove requiretty rule for the Zabbix user if no other commands for zabbix exist (that we created)
+  if [ `/bin/cat /etc/sudoers | /bin/grep ^zabbix -c` == 0 ]; then
+    /bin/grep -v 'Defaults:zabbix !requiretty' /etc/sudoers > /tmp/sudoers.removeme
+    cat /tmp/sudoers.removeme > /etc/sudoers
+    rm /tmp/sudoers.removeme
+  fi
+
 fi
 
 %clean

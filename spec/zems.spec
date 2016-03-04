@@ -52,8 +52,7 @@ install -m 0644 -p templates/*.xml $RPM_BUILD_ROOT%{_datadir}/%{name}/templates
 # Make sure Zabbix can execute zems as root
 if [ -z "`cat /etc/sudoers | grep 'zabbix ALL=NOPASSWD'`" ]; then
     cat <<HERE >> /etc/sudoers
-Cmnd_Alias ZABBIX_CMNDS = /usr/bin/zems
-zabbix ALL=NOPASSWD: ZABBIX_CMNDS
+zabbix ALL=NOPASSWD: /usr/bin/zems
 HERE
 fi
     
@@ -69,6 +68,19 @@ chmod 666 /var/log/zems.log
 # Make zems work on EL5
 if [ ! -z "`uname -r | grep el5`" ]; then
     sed -i 's/#!.*$/#!\/usr\/bin\/python26/' /usr/bin/zems
+fi
+
+%preun
+# remove Zabbix ability to execute /usr/bin/zems as root
+/bin/grep -v "%{name}" /etc/sudoers > /tmp/sudoers.removeme
+cat /tmp/sudoers.removeme > /etc/sudoers
+rm /tmp/sudoers.removeme
+
+# remove requiretty rule for the Zabbix user if no other commands for zabbix exist (that we created)
+if [ `/bin/cat /etc/sudoers | /bin/grep ^zabbix -c` == 0 ]; then
+  /bin/grep -v 'Defaults:zabbix !requiretty' /etc/sudoers > /tmp/sudoers.removeme
+  cat /tmp/sudoers.removeme > /etc/sudoers
+  rm /tmp/sudoers.removeme
 fi
 
 %clean
